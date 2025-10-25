@@ -11,7 +11,7 @@ const AdminDashboard = ({ onLogout }) => {
     {
       id: 1,
       name: "Sarah Johnson",
-      email: "sarah.j@enviro.com",
+      email: "mariem.j@enviro.com",
       role: "Admin",
       status: "online",
       lastActive: "2 min ago",
