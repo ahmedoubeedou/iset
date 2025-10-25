@@ -155,7 +155,7 @@ export default function SensorVisualization({ currentMachine }) {
           </text>
         </svg>
       </div>
-
+    toast.success("")
       {/* Mini Rings Section */}
       <div className="grid grid-cols-3 gap-4 w-full mt-6">
         <MiniRing

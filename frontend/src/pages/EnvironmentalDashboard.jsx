@@ -6,21 +6,21 @@ import Header from '../components/Header';
 import MachinesView from '../components/MachinesView';
 import Sidebar from '../components/Sidebar';
 
-export default function EnvironmentalDashboard() {
+export default function EnvironmentalDashboard({ onLogout }) {  // Added onLogout prop
   const [activeTab, setActiveTab] = useState('dashboard');
   const [machines, setMachines] = useState([
     { id: 'ZZ-999-ZZ', temperature: 65, humidity: 40, gas: 21, status: 'active' }
   ]);
   const [selectedMachine, setSelectedMachine] = useState('ZZ-999-ZZ');
-  const [alertQueue, setAlertQueue] = useState([]);
-  const [isShowingAlert, setIsShowingAlert] = useState(false);
-  const [recentAlerts, setRecentAlerts] = useState([]);
+  const [Alert, setAlert] = useState([]);
+  const [montrantAlerr, setestmontrantalert] = useState(false);
+  const [dernirereAlert, setdernirereAlert] = useState([]);
 
   // Process alert queue
   useEffect(() => {
-    if (alertQueue.length > 0 && !isShowingAlert) {
-      setIsShowingAlert(true);
-      const nextAlert = alertQueue[0];
+    if (Alert.length > 0 && !montrantAlerr) {
+      setestmontrantalert(true);
+      const nextAlert = Alert[0];
 
       toast(nextAlert.message, {
         duration: 4000,
@@ -39,23 +39,21 @@ export default function EnvironmentalDashboard() {
         },
       });
 
-      // Add to recent alerts
-      setRecentAlerts(prev => [
+      setdernirereAlert(prev => [
         {
           ...nextAlert,
           timestamp: new Date().toISOString(),
           id: Date.now()
         },
-        ...prev.slice(0, 19) // Keep last 20 alerts
+        ...prev.slice(0, 19)
       ]);
 
-      // Remove from queue after showing
       setTimeout(() => {
-        setAlertQueue(prev => prev.slice(1));
-        setIsShowingAlert(false);
+        setAlert(prev => prev.slice(1));
+        setestmontrantalert(false);
       }, 4000);
     }
-  }, [alertQueue, isShowingAlert]);
+  }, [Alert, montrantAlerr]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -66,7 +64,6 @@ export default function EnvironmentalDashboard() {
             const newHumidity = Math.round(Math.random() * 20 + 30);
             const newGas = Math.round(Math.random() * 10 + 18);
 
-            // Queue alerts instead of showing immediately
             const alerts = [];
 
             if (newTemp > 70) {
@@ -103,7 +100,7 @@ export default function EnvironmentalDashboard() {
             }
 
             if (alerts.length > 0) {
-              setAlertQueue(prev => [...prev, ...alerts]);
+              setAlert(prev => [...prev, ...alerts]);
             }
 
             return { ...machine, temperature: newTemp, humidity: newHumidity, gas: newGas };
@@ -144,7 +141,11 @@ export default function EnvironmentalDashboard() {
       />
 
       <div className="flex h-screen overflow-hidden relative z-10">
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Sidebar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          onLogout={onLogout}  // Pass onLogout to Sidebar
+        />
 
         <main className="flex-1 flex flex-col overflow-y-auto">
           <Header />
@@ -152,7 +153,7 @@ export default function EnvironmentalDashboard() {
           <div className="p-6 space-y-6">
             {activeTab === 'dashboard' && <DashboardView currentMachine={currentMachine} />}
             {activeTab === 'machines' && <MachinesView machines={machines} />}
-            {activeTab === 'alerts' && <AlertsView alerts={recentAlerts} />}
+            {activeTab === 'alerts' && <AlertsView alerts={dernirereAlert} />}
           </div>
         </main>
       </div>
